@@ -10,12 +10,13 @@ class WeatherScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Weathering"),
-        titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+        titleTextStyle:
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
-              print('refresh');
+              //TODO : implement onPressed
             },
             icon: const Icon(
               Icons.refresh,
@@ -24,7 +25,7 @@ class WeatherScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             // main card
@@ -53,21 +54,12 @@ class WeatherScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Icon(
-                            Icons.cloud,
-                            size: 64,
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
+                          Icon(Icons.cloud, size: 64),
+                          SizedBox(height: 16),
                           Text(
                             'Rain',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ],
                       ),
@@ -76,20 +68,49 @@ class WeatherScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            const SizedBox(height: 20),
+            const Text(
+              "Weekly Forecast",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            const SizedBox(height: 20),
             // weather forecast cards
-            const Placeholder(
-              fallbackHeight: 150,
+            const Row(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Card(
+                    elevation: 6,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Text(
+                            '03:00',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Icon(
+                            Icons.cloud,
+                            size: 32,
+                          ),
+                          SizedBox(height: 8),
+                          Text('320.44'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             // additional information
-            const Placeholder(
-              fallbackHeight: 150,
-            ),
           ],
         ),
       ),

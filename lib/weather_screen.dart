@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:weathering/hourly_forecast_card.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
@@ -70,47 +71,35 @@ class WeatherScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              "Weekly Forecast",
+              "Hourly Forecast",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             // weather forecast cards
-            const Row(
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Card(
-                    elevation: 6,
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Text(
-                            '03:00',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Icon(
-                            Icons.cloud,
-                            size: 32,
-                          ),
-                          SizedBox(height: 8),
-                          Text('320.44'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  HourlyForecastCard(),
+                  HourlyForecastCard(),
+                  HourlyForecastCard(),
+                  HourlyForecastCard(),
+                  HourlyForecastCard(),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            // additional information
+            // additional information\
+            const Text(
+              "More Information",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),

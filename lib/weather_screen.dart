@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:weathering/additional_info_widget.dart';
 import 'package:weathering/hourly_forecast_card.dart';
 
 class WeatherScreen extends StatelessWidget {
@@ -47,6 +48,7 @@ class WeatherScreen extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             '30 °C',
@@ -69,7 +71,7 @@ class WeatherScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             const Text("Hourly Forecast",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
@@ -78,15 +80,15 @@ class WeatherScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  HourlyForecastCard(),
-                  HourlyForecastCard(),
-                  HourlyForecastCard(),
-                  HourlyForecastCard(),
-                  HourlyForecastCard(),
+                  HourlyForecastCard(time: '00:00', icon: Icons.cloud, temperature: '30.2',),
+                  HourlyForecastCard(time: '03:00', icon: Icons.sunny, temperature: '35.2',),
+                  HourlyForecastCard(time: '06:00', icon: Icons.water_drop, temperature: '29.5',),
+                  HourlyForecastCard(time: '09:00', icon: Icons.thunderstorm, temperature: '27.6',),
+                  HourlyForecastCard(time: '12:00', icon: Icons.snowing, temperature: '-4.5',),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             // additional information\
             const Text(
               "More Information",
@@ -94,54 +96,23 @@ class WeatherScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.water_drop_rounded, size: 32),
-                    SizedBox(height: 8),
-                    Text(
-                      'Humidity',
-                      style: TextStyle(fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '94',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                AdditionalInfoWidget(
+                  icon: Icons.water_drop,
+                  label: 'Humidity',
+                  value: '91',
                 ),
-                Column(
-                  children: [
-                    Icon(Icons.air, size: 32),
-                    SizedBox(height: 8),
-                    Text(
-                      'Wind Speed',
-                      style: TextStyle(fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '7.67',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                AdditionalInfoWidget(
+                  icon: Icons.air,
+                  label: 'Wind Speed',
+                  value: '21',
                 ),
-                Column(
-                  children: [
-                    Icon(Icons.beach_access, size: 32),
-                    SizedBox(height: 8),
-                    Text(
-                      'Pressure',
-                      style: TextStyle(fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '1006',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )
+                AdditionalInfoWidget(
+                  icon: Icons.beach_access,
+                  label: 'Pressure',
+                  value: '1006',
+                ),
               ],
             )
           ],

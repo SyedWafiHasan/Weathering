@@ -11,17 +11,17 @@ class WeatherScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Weathering"),
-        titleTextStyle:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        titleTextStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
               //TODO : implement onPressed
             },
-            icon: const Icon(
-              Icons.refresh,
-            ),
+            icon: const Icon(Icons.refresh),
           ),
         ],
       ),
@@ -70,13 +70,8 @@ class WeatherScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              "Hourly Forecast",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Text("Hourly Forecast",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             // weather forecast cards
             const SingleChildScrollView(
@@ -95,11 +90,60 @@ class WeatherScreen extends StatelessWidget {
             // additional information\
             const Text(
               "More Information",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 16),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(Icons.water_drop_rounded, size: 32),
+                    SizedBox(height: 8),
+                    Text(
+                      'Humidity',
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      '94',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(Icons.air, size: 32),
+                    SizedBox(height: 8),
+                    Text(
+                      'Wind Speed',
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      '7.67',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(Icons.beach_access, size: 32),
+                    SizedBox(height: 8),
+                    Text(
+                      'Pressure',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      '1006',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )
+              ],
+            )
           ],
         ),
       ),

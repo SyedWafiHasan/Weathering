@@ -3,9 +3,21 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:weathering/additional_info_widget.dart';
 import 'package:weathering/hourly_forecast_card.dart';
+import 'package:http/http.dart' as http;
+import 'package:weathering/secrets.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
+
+  Future getCurrentWeather() async {
+    String cityName = 'Lucknow';
+    final result = await http.get(
+      Uri.parse(
+        'https://http://api.openweathermap.org/data/2.5/weather?q=$cityName&APPID=$openWeatherAPIKey',
+      ),
+    );
+    print(result.body);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +92,31 @@ class WeatherScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  HourlyForecastCard(time: '00:00', icon: Icons.cloud, temperature: '30.2',),
-                  HourlyForecastCard(time: '03:00', icon: Icons.sunny, temperature: '35.2',),
-                  HourlyForecastCard(time: '06:00', icon: Icons.water_drop, temperature: '29.5',),
-                  HourlyForecastCard(time: '09:00', icon: Icons.thunderstorm, temperature: '27.6',),
-                  HourlyForecastCard(time: '12:00', icon: Icons.snowing, temperature: '-4.5',),
+                  HourlyForecastCard(
+                    time: '00:00',
+                    icon: Icons.cloud,
+                    temperature: '30.2',
+                  ),
+                  HourlyForecastCard(
+                    time: '03:00',
+                    icon: Icons.sunny,
+                    temperature: '35.2',
+                  ),
+                  HourlyForecastCard(
+                    time: '06:00',
+                    icon: Icons.water_drop,
+                    temperature: '29.5',
+                  ),
+                  HourlyForecastCard(
+                    time: '09:00',
+                    icon: Icons.thunderstorm,
+                    temperature: '27.6',
+                  ),
+                  HourlyForecastCard(
+                    time: '12:00',
+                    icon: Icons.snowing,
+                    temperature: '-4.5',
+                  ),
                 ],
               ),
             ),

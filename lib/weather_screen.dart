@@ -3,9 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:weathering/additional_info_widget.dart';
+import 'package:weathering/get_icon.dart';
 import 'package:weathering/hourly_forecast_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:weathering/secrets.dart';
+import 'package:basic_utils/basic_utils.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -67,9 +69,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
           }
 
           final data = snapshot.data!;
-          final currentWeatherData  = data['list'][0];
+          final currentWeatherData = data['list'][0];
           final currentTemp = currentWeatherData['main']['temp'];
           final currentSky = currentWeatherData['weather'][0]['main'];
+          final currentDescription = currentWeatherData['weather'][0]['description'];
+          final currentPressure = currentWeatherData['main']['pressure'];
+          final currentWindSpeed = currentWeatherData['wind']['speed'];
+          final currentHumidity = currentWeatherData['main']['humidity'];
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -103,10 +109,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              const Icon(Icons.cloud, size: 64),
+                              Icon(getIcon(currentSky), size: 64),
                               const SizedBox(height: 16),
                               Text(
-                                currentSky,
+                                StringUtils.capitalize(currentDescription, allWords: true),
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
@@ -123,36 +129,38 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
                 const SizedBox(height: 16),
                 // weather forecast cards
-                const SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      HourlyForecastCard(
-                        time: '00:00',
-                        icon: Icons.cloud,
-                        temperature: '30.2',
-                      ),
-                      HourlyForecastCard(
-                        time: '03:00',
-                        icon: Icons.sunny,
-                        temperature: '35.2',
-                      ),
-                      HourlyForecastCard(
-                        time: '06:00',
-                        icon: Icons.water_drop,
-                        temperature: '29.5',
-                      ),
-                      HourlyForecastCard(
-                        time: '09:00',
-                        icon: Icons.thunderstorm,
-                        temperature: '27.6',
-                      ),
-                      HourlyForecastCard(
-                        time: '12:00',
-                        icon: Icons.snowing,
-                        temperature: '-4.5',
-                      ),
-                    ],
+                // SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     children: [
+                //       for (int i = 0; i < 5; i++)
+                //         HourlyForecastCard(
+                //           time: data['list'][i + 1]['dt_txt'].toString().split(" ")[1],
+                //           icon: data['list'][i + 1]['weather'][0]['main'] == 'Clouds' || data['list'][i + 1]['weather'][0]['main'] ==
+                //                   'Rain' ? Icons.cloud : Icons.sunny,
+                //           temperature: data['list'][i + 1]['main']['temp'].toString(),
+                //         ),
+
+                //     ],
+                //   ),
+                // ),
+                SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      final hourlyForecast = data['list'][index + 1];
+                      final hourlySky =
+                          data['list'][index + 1]['weather'][0]['main'];
+                      final hourlyTemperature =
+                          hourlyForecast['main']['temp'].toString();
+                      return HourlyForecastCard(
+                        time: hourlyForecast['dt_txt'].toString(),
+                        icon: getIcon(hourlySky),
+                        temperature: hourlyTemperature,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -162,23 +170,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     AdditionalInfoWidget(
                       icon: Icons.water_drop,
                       label: 'Humidity',
-                      value: '91',
+                      value: currentHumidity.toString(),
                     ),
                     AdditionalInfoWidget(
                       icon: Icons.air,
                       label: 'Wind Speed',
-                      value: '21',
+                      value: currentWindSpeed.toString(),
                     ),
                     AdditionalInfoWidget(
                       icon: Icons.beach_access,
                       label: 'Pressure',
-                      value: '1006',
+                      value: currentPressure.toString(),
                     ),
                   ],
                 )

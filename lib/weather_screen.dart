@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weathering/additional_info_widget.dart';
 import 'package:weathering/get_icon.dart';
 import 'package:weathering/hourly_forecast_card.dart';
@@ -17,13 +18,14 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  late Future<Map<String, dynamic>> weather;
   Future<Map<String, dynamic>> getCurrentWeather() async {
     String cityName = 'Lucknow';
     dynamic res = "";
     try {
       final response = await http.get(
         Uri.parse(
-          'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$openWeatherAPIKey',
+          'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$openWeatherAPIKey&units=metric',
         ),
       );
       final dynamic data = jsonDecode(response.body);
@@ -39,6 +41,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    weather = getCurrentWeather();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -51,14 +59,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              //TODO : implement onPressed
+              setState(() {
+                weather = getCurrentWeather();
+              });
             },
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
       body: FutureBuilder(
-        future: getCurrentWeather(),
+        future: weather,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -72,7 +82,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
           final currentWeatherData = data['list'][0];
           final currentTemp = currentWeatherData['main']['temp'];
           final currentSky = currentWeatherData['weather'][0]['main'];
-          final currentDescription = currentWeatherData['weather'][0]['description'];
+          final currentDescription =
+              currentWeatherData['weather'][0]['description'];
           final currentPressure = currentWeatherData['main']['pressure'];
           final currentWindSpeed = currentWeatherData['wind']['speed'];
           final currentHumidity = currentWeatherData['main']['humidity'];
@@ -102,7 +113,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '$currentTemp K',
+                                '$currentTemp °C',
                                 style: const TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
@@ -112,7 +123,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               Icon(getIcon(currentSky), size: 64),
                               const SizedBox(height: 16),
                               Text(
-                                StringUtils.capitalize(currentDescription, allWords: true),
+                                StringUtils.capitalize(currentDescription,
+                                    allWords: true),
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
@@ -128,37 +140,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                // weather forecast cards
-                // SingleChildScrollView(
-                //   scrollDirection: Axis.horizontal,
-                //   child: Row(
-                //     children: [
-                //       for (int i = 0; i < 5; i++)
-                //         HourlyForecastCard(
-                //           time: data['list'][i + 1]['dt_txt'].toString().split(" ")[1],
-                //           icon: data['list'][i + 1]['weather'][0]['main'] == 'Clouds' || data['list'][i + 1]['weather'][0]['main'] ==
-                //                   'Rain' ? Icons.cloud : Icons.sunny,
-                //           temperature: data['list'][i + 1]['main']['temp'].toString(),
-                //         ),
-
-                //     ],
-                //   ),
-                // ),
                 SizedBox(
-                  height: 120,
+                  height: 140,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 5,
+                    itemCount: 10,
                     itemBuilder: (context, index) {
                       final hourlyForecast = data['list'][index + 1];
                       final hourlySky =
                           data['list'][index + 1]['weather'][0]['main'];
                       final hourlyTemperature =
                           hourlyForecast['main']['temp'].toString();
+                      final hourlyDescription = hourlyForecast['weather'][0]['description'];
+                      final time = DateTime.parse(hourlyForecast['dt_txt']);
                       return HourlyForecastCard(
-                        time: hourlyForecast['dt_txt'].toString(),
+                        time: DateFormat('E, ha').format(time),
                         icon: getIcon(hourlySky),
                         temperature: hourlyTemperature,
+                        description: hourlyDescription,
                       );
                     },
                   ),
